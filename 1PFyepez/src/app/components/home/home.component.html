@@ -1,0 +1,204 @@
+
+
+<div class="accordion" id="accordionExample" *ngIf="!isLogin">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
+                LOGIN
+            </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+
+                <!-- Login form -->
+                <div class="col-md-6 p-2">
+                
+                    <form [formGroup]="loginForm" (ngSubmit)="loginusr()">
+                        <div class="row mb-3">
+                            <label for="emaillogin" class="col-sm-2 col-form-label ">Email</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="emaillogin" formControlName="emaillogin" required
+                                    [class.is-invalid]="loginForm.get('emaillogin')?.invalid && loginForm.get('emaillogin')?.touched"
+                                    [class.is-valid]="loginForm.get('emaillogin')?.valid && loginForm.get('emaillogin')?.touched">
+                            </div>
+                            <span class="text-danger" *ngIf="isSubmitLogin && loginForm.get('emaillogin')?.invalid">Este campo es
+                                requerido</span>
+                        </div>
+                
+                
+                        <button type="submit" class="btn btn-primary">INGRESAR</button>
+                    </form>
+                
+                
+                </div>
+                <!-- / termina Login form -->
+                
+                
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                REGISTRO
+            </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+
+                <!-- Registro form -->
+                <div class="col-md-6 p-2">
+                    <form [formGroup]="registroForm" (ngSubmit)="registrousr()">
+                        <div class="form-group pt-2">
+                            <label for="nombre">Nombre completo:</label>
+                            <input type="text" class="form-control" required="" name="nombre" formControlName="nombre"
+                                [class.is-invalid]="registroForm.get('nombre')?.invalid && registroForm.get('nombre')?.touched "
+                                [class.is-valid]="registroForm.get('nombre')?.valid && registroForm.get('nombre')?.touched">
+                            <span class="text-danger" *ngIf="isSubmitReg && registroForm.get('nombre')?.invalid ">
+                                Este campo es requerido y solo se aceptan letras mínimo de caracteres (3).
+                            </span>
+                        </div>
+                        <div class="form-group pt-2">
+                            <label for="tel">Teléfono:</label>
+                            <input type="tel" class="form-control" maxlength="10" required name="telefono"
+                                formControlName="telefono"
+                                [class.is-invalid]="registroForm.get('telefono')?.invalid && registroForm.get('telefono')?.touched "
+                                [class.is-valid]="registroForm.get('telefono')?.valid && registroForm.get('telefono')?.touched">
+                            <small id="tel" class="form-text text-muted">Ingresa 10 dígitos.</small><br>
+                            <span class="text-danger" *ngIf="isSubmitReg && registroForm.get('telefono')?.invalid ">
+                                Este campo es requerido y permíte hasta 10 dígitos numéricos.
+                            </span>
+                        </div>
+                        <div class="form-group pt-2">
+                            <label for="email">Correo electrónico:</label>
+                            <input type="email" class="form-control" required name="correo" formControlName="correo"
+                                [class.is-invalid]="registroForm.get('correo')?.invalid && registroForm.get('correo')?.touched "
+                                [class.is-valid]="registroForm.get('correo')?.valid && registroForm.get('correo')?.touched">
+                            <span class="text-danger" *ngIf="isSubmitReg && registroForm.get('correo')?.invalid ">
+                                Se requiere un email valido.
+                            </span>
+                        </div>
+                
+                
+                        <div class="pt-3">
+                            <button type="submit" class="btn btn-primary btnG">REGISTRARME</button>
+                
+                        </div>
+                
+                    </form>
+                </div>
+                <!-- /Termina Registro form -->
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div *ngIf="isLogin">
+
+    <div class="row" >
+        <div class="col-md-4">
+            <p>Hola {{ nuevoAlumno.nombre }} </p>
+            <button type="button" class="btn btn-danger" (click)="salir()">SALIR</button>
+        </div>
+    </div>
+    
+    <div class="row pt-3" >
+        <h2>Calificaciones</h2>
+        <div class="col-md-12">
+            <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="bi bi-plus"></i> Nueva materia</button>
+    
+            <div class="table-responsive">
+    
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Materia</th>
+                            <th scope="col">Calificacion</th>
+                            <th scope="col">Modifica</th>
+                            <th scope="col">Elimina</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let materia of materias" [ngClass]="materia.calificacion <= 7 ? 'table-danger' : 'table-success' ">
+                            <td>{{materia.materia}}</td>
+                            <td>{{ materia.calificacion }}</td>
+                            <td><button type="button" class="btn btn-warning " (click)="popActualiza(materia.id, materia.materia)" ><i class="bi bi-pencil"></i></button></td>
+                            <td><button type="button" class="btn btn-danger " (click)="eliminaMateria(materia.id, materia.alumno)"><i class="bi bi-trash"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<!--MODAL NUEVA MATERIA-->
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">NUEVA MATERA</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formMateria" (ngSubmit)="registroMat()">
+                    <div class="form-group pt-2">
+                        <label for="alumno">Alumno:</label>
+                        <input type="text" readonly class="form-control" required="" name="alumno" formControlName="alumno"
+                            [class.is-invalid]="formMateria.get('alumno')?.invalid && formMateria.get('alumno')?.touched "
+                            [class.is-valid]="formMateria.get('alumno')?.valid && formMateria.get('alumno')?.touched">
+                        <span class="text-danger" *ngIf="isSubmitMat && formMateria.get('alumno')?.invalid ">
+                            Este campo es requerido y solo se aceptan letras mínimo de caracteres (3).
+                        </span>
+                    </div>
+                    <div class="form-group pt-2">
+                        <label for="materia">Materia:</label>
+                        <input type="text" class="form-control" required="" name="materia" formControlName="materia"
+                            [class.is-invalid]="formMateria.get('materia')?.invalid && formMateria.get('materia')?.touched "
+                            [class.is-valid]="formMateria.get('materia')?.valid && formMateria.get('materia')?.touched">
+                        <span class="text-danger" *ngIf="isSubmitMat && formMateria.get('materia')?.invalid ">
+                            Este campo es requerido y solo se aceptan letras mínimo de caracteres (3).
+                        </span>
+                    </div>
+                    <div class="form-group pt-2">
+                        <label for="tel">Calificacion:</label>
+                        <input type="number" class="form-control" maxlength="10" required name="calificacion" formControlName="calificacion"
+                            [class.is-invalid]="formMateria.get('calificacion')?.invalid && formMateria.get('calificacion')?.touched "
+                            [class.is-valid]="formMateria.get('calificacion')?.valid && formMateria.get('calificacion')?.touched">
+                        <br>
+                        <span class="text-danger" *ngIf="isSubmitMat && formMateria.get('calificacion')?.invalid ">
+                            Este campo es requerido.
+                        </span>
+                    </div>
+
+                    <div class="pt-3">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--https://melvingeorge.me/blog/save-arrays-objects-to-localstorage-javascript
+
+https://stackoverflow.com/questions/45211870/angular-2-storing-and-getting-objects-array-from-localstorage-->
